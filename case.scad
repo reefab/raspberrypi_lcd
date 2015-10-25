@@ -8,7 +8,7 @@ components_clearance    = 20.5;
 
 headphone_hole_offset_x = 32.5;
 headphone_hole_offset_z = 16;
-headphone_hole_dia      = 6;
+headphone_hole_dia      = 8;
 
 screen_offset_x         = 6;
 screen_offset_y         = 8;
@@ -19,7 +19,7 @@ screen_frame_width      = 76.5;
 screen_frame_thickness  = 6.5;
 
 rj45_width              = 17;
-rj45_height             = 13.5;
+rj45_height             = 14.5;
 rj45_offset_y           = 60;
 rj45_offset_z           = 18;
 
@@ -42,7 +42,8 @@ second_usb_offset_y     = 24.5;
 
 wall_thickness          = 1;
 pcb_shelf_width         = 1;
-case_height             = 25;
+total_height            = pcb_thickness + pcb_bottom_clearance + components_clearance;
+top_case_height         = 24;
 
 module raspberry_plus_screen() {
     translate([0, 0, pcb_thickness + components_clearance]) {
@@ -94,37 +95,38 @@ module roundrect(size, radius = 1) {
 module case() {
     difference() {
         union() {
-            translate([0, 0, pcb_thickness + components_clearance +
-                             pcb_bottom_clearance - case_height])
+            translate([0, 0, -wall_thickness])
                 roundrect([pcb_length + wall_thickness * 2,
                            pcb_width + wall_thickness * 2,
-                           case_height], wall_thickness);
+                           total_height], wall_thickness);
                 for(i=[-0.5, pcb_length + 2.5])
                     for(j=[-0.5, pcb_width + 2.5])
-                        translate([i, j, pcb_thickness + components_clearance +
-                                         pcb_bottom_clearance - case_height])
-                                cylinder(d=5, h=case_height, $fn=50);
+                        translate([i, j, -wall_thickness])
+                                cylinder(d=5, h=total_height, $fn=50);
         }
         translate([wall_thickness, wall_thickness, 0]) raspberry_plus_screen();
         for(i=[-0.5, pcb_length + 2.5])
             for(j=[-0.5, pcb_width + 2.5])
-                translate([i, j, pcb_thickness + components_clearance +
-                                 pcb_bottom_clearance - case_height])
-                    cylinder(d=3 + clearance, h=case_height, $fn=50);
+                translate([i, j, -wall_thickness])
+                    cylinder(d=3 + clearance, h=total_height, $fn=50);
     }
 }
 
-module lid() {
+
+module top_case() {
     difference() {
-        roundrect([pcb_length + wall_thickness * 2,
-                   pcb_width + wall_thickness * 2,
-                   wall_thickness], wall_thickness);
-        translate([wall_thickness, wall_thickness, 0])
-            cube([pcb_length, pcb_width, wall_thickness + 1]);
+        case();
+        translate([-10, -10, -wall_thickness]) cube([300, 300, total_height - top_case_height]);
     }
 }
 
-rotate([180, 0, 0]) case();
-/* raspberry_plus_screen(); */
+module bottom_case() {
+    difference() {
+        case();
+        translate([-10, -10, total_height - top_case_height]) cube([300, 300, total_height]);
+    }
+}
 
-/* translate([0, -50, 0]) lid(); */
+translate([0, -10, total_height - wall_thickness]) rotate([180, 0, 0]) top_case();
+translate([0, 10, wall_thickness]) bottom_case();
+
