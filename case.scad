@@ -8,7 +8,7 @@ components_clearance    = 20.5;
 
 headphone_hole_offset_x = 32.5;
 headphone_hole_offset_z = 14;
-headphone_hole_dia      = 8;
+headphone_hole_dia      = 7;
 
 screen_offset_x         = 6;
 screen_offset_y         = 8;
@@ -28,22 +28,35 @@ usb_height              = 15.5;
 usb_offset_y            = 42;
 usb_offset_z            = 18;
 
+second_usb_offset_y     = 24.5;
+
 hdmi_width              = 15.5;
 hdmi_height             = 15;
-hdmi_offset_x           = 47;
+hdmi_offset_x           = 48;
 hdmi_offset_z           = 17;
 
-microusb_offset_x       = 68;
+microusb_offset_x       = 69;
 microusb_offset_z       = 6.5;
 microusb_width          = 12;
 microusb_height         = 6;
 
-second_usb_offset_y     = 24.5;
+blind_microusb_offset_x = 69;
+blind_microusb_offset_z = 19.5;
+blind_microusb_width    = 12;
+blind_microusb_height   = 6;
+
+switch_offset_y         = 10;
+switch_offset_z         = 10;
+switch_width            = 10;
+switch_height           = 7;
 
 wall_thickness          = 1;
 pcb_shelf_width         = 1;
 total_height            = pcb_thickness + pcb_bottom_clearance + components_clearance;
 top_case_height         = 22;
+
+foot_holes_dia          = 3;
+foot_holes_spacing      = 40;
 
 module raspberry_plus_screen() {
     translate([0, 0, pcb_thickness + components_clearance]) {
@@ -67,6 +80,10 @@ module raspberry_plus_screen() {
             cube([hdmi_width, 5, hdmi_height]);
         translate([microusb_offset_x, pcb_width, -microusb_offset_z])
             cube([microusb_width, 5, microusb_height]);
+        translate([blind_microusb_offset_x, pcb_width, -blind_microusb_offset_z])
+            cube([blind_microusb_width, 1, blind_microusb_height]);
+        translate([pcb_length, switch_offset_y, -switch_offset_z])
+            cube([5, switch_width, switch_height]);
     }
 }
 
@@ -109,6 +126,9 @@ module case() {
             for(j=[-0.5, pcb_width + 2.5])
                 translate([i, j, -wall_thickness])
                     cylinder(d=3 + clearance, h=total_height, $fn=50);
+        for(i=[-1, 1])
+            translate([pcb_length/2 + i * foot_holes_spacing/2, wall_thickness, total_height/2])
+                 rotate([90, 0, 0]) cylinder(d=foot_holes_dia + clearance, h=10, $fn=20);
     }
 }
 
@@ -129,4 +149,5 @@ module bottom_case() {
 
 translate([0, -10, total_height - wall_thickness]) rotate([180, 0, 0]) top_case();
 //translate([0, 10, wall_thickness]) bottom_case();
+/* case(); */
 
