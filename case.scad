@@ -7,7 +7,7 @@ pcb_bottom_clearance    = 8.5;
 components_clearance    = 20.5;
 
 headphone_hole_offset_x = 32.5;
-headphone_hole_offset_z = 16;
+headphone_hole_offset_z = 14;
 headphone_hole_dia      = 8;
 
 screen_offset_x         = 6;
@@ -30,11 +30,11 @@ usb_offset_z            = 18;
 
 hdmi_width              = 15.5;
 hdmi_height             = 15;
-hdmi_offset_x           = 46;
+hdmi_offset_x           = 47;
 hdmi_offset_z           = 17;
 
-microusb_offset_x       = 69;
-microusb_offset_z       = 5;
+microusb_offset_x       = 68;
+microusb_offset_z       = 6.5;
 microusb_width          = 12;
 microusb_height         = 6;
 
@@ -43,7 +43,7 @@ second_usb_offset_y     = 24.5;
 wall_thickness          = 1;
 pcb_shelf_width         = 1;
 total_height            = pcb_thickness + pcb_bottom_clearance + components_clearance;
-top_case_height         = 24;
+top_case_height         = 22;
 
 module raspberry_plus_screen() {
     translate([0, 0, pcb_thickness + components_clearance]) {
@@ -128,5 +128,5 @@ module bottom_case() {
 }
 
 translate([0, -10, total_height - wall_thickness]) rotate([180, 0, 0]) top_case();
-translate([0, 10, wall_thickness]) bottom_case();
+//translate([0, 10, wall_thickness]) bottom_case();
 
