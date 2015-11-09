@@ -1,3 +1,6 @@
+DRAW_TOP                = true;
+DRAW_BOTTOM             = true;
+
 clearance               = 0.2;
 
 pcb_length              = 122;
@@ -30,9 +33,9 @@ usb_offset_z            = 18;
 
 second_usb_offset_y     = 24.5;
 
-hdmi_width              = 15.5;
+hdmi_width              = 16.5;
 hdmi_height             = 15;
-hdmi_offset_x           = 48;
+hdmi_offset_x           = 45;
 hdmi_offset_z           = 17;
 
 microusb_offset_x       = 69;
@@ -48,7 +51,7 @@ blind_microusb_height   = 6;
 switch_offset_y         = 10;
 switch_offset_z         = 10;
 switch_width            = 10;
-switch_height           = 7;
+switch_height           = 5;
 
 wall_thickness          = 1;
 pcb_shelf_width         = 1;
@@ -75,7 +78,7 @@ module raspberry_plus_screen() {
         translate([-5, second_usb_offset_y, -usb_offset_z])
             cube([5, usb_width, usb_height]);
         translate([headphone_hole_offset_x, pcb_width, -headphone_hole_offset_z])
-            rotate([-90, 0, 0]) cylinder(d=headphone_hole_dia, h=5);
+            rotate([-90, 0, 0]) cylinder(d=headphone_hole_dia, h=5, $fn=20);
         translate([hdmi_offset_x, pcb_width, -hdmi_offset_z])
             cube([hdmi_width, 5, hdmi_height]);
         translate([microusb_offset_x, pcb_width, -microusb_offset_z])
@@ -86,7 +89,6 @@ module raspberry_plus_screen() {
             cube([5, switch_width, switch_height]);
     }
 }
-
 
 module roundrect(size, radius = 1) {
     x = size[0];
@@ -132,7 +134,6 @@ module case() {
     }
 }
 
-
 module top_case() {
     difference() {
         case();
@@ -147,7 +148,7 @@ module bottom_case() {
     }
 }
 
-translate([0, -10, total_height - wall_thickness]) rotate([180, 0, 0]) top_case();
-//translate([0, 10, wall_thickness]) bottom_case();
-/* case(); */
-
+if(DRAW_TOP == true)
+    translate([0, -10, total_height - wall_thickness]) rotate([180, 0, 0]) top_case();
+if(DRAW_BOTTOM == true)
+    translate([0, 10, wall_thickness]) bottom_case();
