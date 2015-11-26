@@ -137,18 +137,21 @@ module case() {
 module top_case() {
     difference() {
         case();
-        translate([-10, -10, -wall_thickness]) cube([300, 300, total_height - top_case_height]);
+        translate([-10, -10, -wall_thickness])
+            cube([300, 300, total_height - top_case_height]);
     }
 }
 
 module bottom_case() {
     difference() {
         case();
-        translate([-10, -10, total_height - top_case_height]) cube([300, 300, total_height]);
+        translate([-10, -10, total_height - top_case_height])
+            cube([300, 300, total_height]);
     }
 }
 
 if(DRAW_TOP == true)
-    translate([0, -10, total_height - wall_thickness]) rotate([180, 0, 0]) top_case();
+    translate([0, -10, total_height - wall_thickness])
+        rotate([180, 0, 0]) top_case();
 if(DRAW_BOTTOM == true)
     translate([0, 10, wall_thickness]) bottom_case();
