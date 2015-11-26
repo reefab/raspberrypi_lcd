@@ -1,5 +1,5 @@
-DRAW_TOP                = true;
-DRAW_BOTTOM             = true;
+DRAW_TOP                = false;
+DRAW_BOTTOM             = false;
 
 clearance               = 0.2;
 
@@ -54,12 +54,18 @@ switch_width            = 10;
 switch_height           = 5;
 
 wall_thickness          = 1;
+side_wall_thickness     = 4;
 pcb_shelf_width         = 1;
 total_height            = pcb_thickness + pcb_bottom_clearance + components_clearance;
 top_case_height         = 22;
 
 foot_holes_dia          = 3;
 foot_holes_spacing      = 40;
+
+m3_sh_head_dia          = 5.4;
+m3_sh_head_thickness    = 3;
+m3_nut_witdh            = 5.4;
+m3_nut_thickness        = 2.4;
 
 module raspberry_plus_screen() {
     translate([0, 0, pcb_thickness + components_clearance]) {
@@ -115,19 +121,23 @@ module case() {
     difference() {
         union() {
             translate([0, 0, -wall_thickness])
-                roundrect([pcb_length + wall_thickness * 2,
-                           pcb_width + wall_thickness * 2,
+                roundrect([pcb_length + side_wall_thickness * 2,
+                           pcb_width + side_wall_thickness * 2,
                            total_height], wall_thickness);
-                for(i=[-0.5, pcb_length + 2.5])
-                    for(j=[-0.5, pcb_width + 2.5])
-                        translate([i, j, -wall_thickness])
-                                cylinder(d=5, h=total_height, $fn=50);
+                /* for(i=[-0.5, pcb_length + 2.5]) */
+                /*     for(j=[-0.5, pcb_width + 2.5]) */
+                /*         translate([i, j, -wall_thickness]) */
+                /*                 cylinder(d=5, h=total_height, $fn=50); */
         }
-        translate([wall_thickness, wall_thickness, 0]) raspberry_plus_screen();
-        for(i=[-0.5, pcb_length + 2.5])
-            for(j=[-0.5, pcb_width + 2.5])
-                translate([i, j, -wall_thickness])
-                    cylinder(d=3 + clearance, h=total_height, $fn=50);
+        translate([side_wall_thickness, side_wall_thickness, 0]) raspberry_plus_screen();
+        for(i=[side_wall_thickness/2, pcb_length + side_wall_thickness*1.5])
+            for(j=[side_wall_thickness/2, pcb_width + side_wall_thickness*1.5])
+                translate([i, j, -wall_thickness]) {
+                     cylinder(d=3 + clearance, h=total_height, $fn=50);
+                     cylinder(r = (m3_nut_witdh + clearance/2) / 2 / cos(180 / 6) + 0.05, h=m3_nut_thickness, $fn=6);
+                     translate([0, 0, total_height - m3_sh_head_thickness])
+                        # cylinder(d=m3_sh_head_dia + clearance, h=m3_sh_head_thickness, $fn=50);
+                }
         for(i=[-1, 1])
             translate([pcb_length/2 + i * foot_holes_spacing/2, wall_thickness, total_height/2])
                  rotate([90, 0, 0]) cylinder(d=foot_holes_dia + clearance, h=10, $fn=20);
@@ -155,3 +165,5 @@ if(DRAW_TOP == true)
         rotate([180, 0, 0]) top_case();
 if(DRAW_BOTTOM == true)
     translate([0, 10, wall_thickness]) bottom_case();
+if(DRAW_TOP == false && DRAW_BOTTOM == false)
+    case();
