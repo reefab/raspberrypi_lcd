@@ -10,7 +10,7 @@ pcb_bottom_clearance    = 8.5;
 components_clearance    = 20.5;
 
 headphone_hole_offset_x = 32.5;
-headphone_hole_offset_z = 15;
+headphone_hole_offset_z = 13;
 headphone_hole_dia      = 7;
 
 screen_offset_x         = 6;
@@ -83,8 +83,8 @@ module raspberry_plus_screen() {
             cube([5, usb_width, usb_height]);
         translate([-5, second_usb_offset_y, -usb_offset_z])
             cube([5, usb_width, usb_height]);
-        translate([-6, second_usb_offset_y, -usb_offset_z])
-            cube([5, rj45_offset_y - second_usb_offset_y, usb_height]);
+        translate([-6, second_usb_offset_y - 2, -usb_offset_z])
+            cube([5, rj45_offset_y - second_usb_offset_y + 2, usb_height  + 2]);
         translate([headphone_hole_offset_x, pcb_width, -headphone_hole_offset_z])
             rotate([-90, 0, 0]) cylinder(d=headphone_hole_dia, h=5, $fn=20);
         translate([headphone_hole_offset_x, pcb_width + 1, -headphone_hole_offset_z])
