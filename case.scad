@@ -1,5 +1,6 @@
 DRAW_TOP                = false;
 DRAW_BOTTOM             = false;
+DRAW_PLUG               = false;
 
 clearance               = 0.2;
 
@@ -160,11 +161,22 @@ module bottom_case() {
     }
 }
 
+module plug() {
+    difference() {
+        roundrect([22, 19, 7]);
+        translate([2, 2, 0]) cube([18, 15, 5]);
+    }
+}
+
 if(DRAW_TOP == true)
     translate([0, -10, total_height - wall_thickness])
         rotate([180, 0, 0]) top_case();
 if(DRAW_BOTTOM == true)
     translate([0, 10, wall_thickness]) bottom_case();
-if(DRAW_TOP == false && DRAW_BOTTOM == false)
+if(DRAW_PLUG == true)
+    rotate([0, 180, 0]) plug();
+if(DRAW_TOP == false && DRAW_BOTTOM == false && DRAW_PLUG == false) {
     /* raspberry_plus_screen(); */
     case();
+    translate([0, -30, 0]) plug();
+}
